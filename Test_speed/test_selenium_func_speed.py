@@ -51,8 +51,10 @@ class Selenium_test:
         # Click on the third button delete item 
         delete_xpath = '//div[@class="tbl-content"]/table/tbody/tr[3]/td[7]/a[2]'
         driver.find_element(By.XPATH, delete_xpath).click()
-        # assert 'word' not in [xpath row[1]] need order dashboard by last added 
-        # Or need to use Candidacy.query.filter_by(name=[element to check]) methods ?
+        # need order dashboard by last added to assert 'word' not in [xpath row[1]] 
+        # Or need candidacy id on admin dashboard to assert deleted
+        # Or need to use Candidacy.query.filter_by(name=["element to check"]) methods ?
+        # 
         print('------------------delete candidacy n°3 done----------------------')
         
 
@@ -68,6 +70,8 @@ class Selenium_test:
 
     def click_login():
         driver.find_element_by_link_text('Log in').click()
+        h1 = driver.find_element_by_tag_name('h1').text
+        assert h1 == "LOG IN"
         print('---------------Click to login---------------------------')
 
     def modify_candidacy():
@@ -78,10 +82,13 @@ class Selenium_test:
         modify_xpath = '//tbody/tr[3]/td[7]/a[1]'
         driver.find_element(By.XPATH, modify_xpath).click()
       
-        driver.find_element_by_id('status').send_keys('Accepté')
+        status = driver.find_element_by_id('status')
+        status.clear()
+        status.send_keys('Accepté')
         driver.find_element_by_id('button').click()
         
         status_end = driver.find_element(By.XPATH, status_xpath).text
         assert status_start != status_end
+        assert status_end == "Accepté"
         print('----------------Test modify status Candidacy-------------')
         
